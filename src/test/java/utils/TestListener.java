@@ -9,19 +9,23 @@ import org.testng.ITestResult;
 
 public class TestListener implements ITestListener {
 
+    // Single ExtentReports instance
     private static ExtentReports extent = ExtentManager.getExtent();
+
+    // Thread-safe ExtentTest for parallel execution
     private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
     @Override
     public void onTestStart(ITestResult result) {
-        ExtentTest extentTest =
-                extent.createTest(result.getMethod().getMethodName());
+        ExtentTest extentTest = extent.createTest(result.getMethod().getMethodName());
         test.set(extentTest);
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        test.get().pass("Test Passed");
+        if (test.get() != null) {
+            test.get().pass("Test Passed");
+        }
     }
 
     @Override
@@ -32,22 +36,44 @@ public class TestListener implements ITestListener {
         if (testClass instanceof BaseTest) {
             BaseTest baseTest = (BaseTest) testClass;
 
-            String screenshotPath =
-                    ScreenshotUtils.takeScreenshot(
-                            baseTest.getDriver(),
-                            result.getName()
-                    );
+            // Take screenshot using the getter
+            String screenshotPath = ScreenshotUtils.takeScreenshot(
+                    baseTest.getDriver(),
+                    result.getName()
+            );
 
-            test.get().fail(result.getThrowable());
+            // Log the exception
+            if (test.get() != null) {
+                test.get().fail(result.getThrowable());
 
-            if (screenshotPath != null) {
-                test.get().addScreenCaptureFromPath(screenshotPath);
+                // Attach screenshot if available
+                if (screenshotPath != null) {
+                    try {
+                        test.get().addScreenCaptureFromPath(screenshotPath);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
 
     @Override
+    public void onTestSkipped(ITestResult result) {
+        if (test.get() != null) {
+            test.get().skip("Test Skipped");
+        }
+    }
+
+    @Override
+    public void onStart(ITestContext context) {
+        // Nothing to do here
+    }
+
+    @Override
     public void onFinish(ITestContext context) {
-        extent.flush();
+        if (extent != null) {
+            extent.flush();
+        }
     }
 }
