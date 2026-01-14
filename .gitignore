@@ -1,30 +1,67 @@
-### IntelliJ IDEA ###
+#################################
+# Maven
+#################################
+target/
+
+#################################
+# IntelliJ IDEA
+#################################
+.idea/
+*.iml
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-.kotlin
 
-### Eclipse ###
+#################################
+# Eclipse
+#################################
 .apt_generated
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
-.sts4-cache
+.sts4-cache/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
-### NetBeans ###
+#################################
+# NetBeans
+#################################
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
+#################################
+# VS Code
+#################################
 .vscode/
 
-### Mac OS ###
+#################################
+# OS files
+#################################
 .DS_Store
+Thumbs.db
+
+#################################
+# Logs & reports
+#################################
+*.log
+/test-output/
+reports/
+screenshots/
+
+#################################
+# Selenium / WebDriver
+#################################
+*.exe
+*.zip
+*.tar.gz
+
+#################################
+# Kotlin (safe to keep)
+#################################
+.kotlin
