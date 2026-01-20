@@ -11,14 +11,17 @@ public class ExtentManager {
 
         if (extent == null) {
 
-            ExtentSparkReporter reporter =
-                    new ExtentSparkReporter("reports/ExtentReport.html");
+            String reportPath = System.getProperty("user.dir")
+                    + "/target/extent-report.html";
 
-            reporter.config().setReportName("DP Education Automation Report");
-            reporter.config().setDocumentTitle("Test Execution Report");
+            ExtentSparkReporter sparkReporter =
+                    new ExtentSparkReporter(reportPath);
+
+            sparkReporter.config().setReportName("Automation Test Report");
+            sparkReporter.config().setDocumentTitle("DPEducation Automation");
 
             extent = new ExtentReports();
-            extent.attachReporter(reporter);
+            extent.attachReporter(sparkReporter);
         }
 
         return extent;

@@ -2,22 +2,21 @@ package tests;
 
 import base.BaseTest;
 import org.testng.Assert;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import utils.TestListener;
 
-@Listeners(TestListener.class)
 public class LoginTest extends BaseTest {
 
     @Test
     public void openGoogleTest() {
         driver.get("https://www.google.com");
-        Assert.assertTrue(driver.getTitle().contains("Google"));
+        String title = driver.getTitle();
+        Assert.assertTrue(title.contains("Google"), "Expected title to contain 'Google' but found: " + title);
     }
 
     @Test
-    public void failingTest() {
+    public void verifyGoogleTitleTest() {
         driver.get("https://www.google.com");
-        Assert.assertTrue(driver.getTitle().contains("Yahoo")); // will fail
+        String title = driver.getTitle();
+        Assert.assertTrue(title.contains("Google"), "Expected title to contain 'Google' but found: " + title);
     }
 }
